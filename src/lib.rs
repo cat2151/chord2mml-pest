@@ -8,20 +8,22 @@ pub struct ChordParser;
 
 /// Maps a chord name to its scale degree (1-7) in C major scale
 /// C=1, D=2, E=3, F=4, G=5, A=6, B=7
-fn chord_to_degree(chord: &str) -> u8 {
+/// Returns None for invalid chords
+fn chord_to_degree(chord: &str) -> Option<u8> {
     match chord.to_uppercase().as_str() {
-        "C" => 1,
-        "D" => 2,
-        "E" => 3,
-        "F" => 4,
-        "G" => 5,
-        "A" => 6,
-        "B" => 7,
-        _ => 0, // Invalid chord
+        "C" => Some(1),
+        "D" => Some(2),
+        "E" => Some(3),
+        "F" => Some(4),
+        "G" => Some(5),
+        "A" => Some(6),
+        "B" => Some(7),
+        _ => None,
     }
 }
 
 /// Parse a chord progression string (e.g., "C-F-G-C") into a vector of scale degrees
+/// Note: Currently only supports basic note names (C, D, E, F, G, A, B) without accidentals
 pub fn parse_chord_progression(input: &str) -> Result<Vec<u8>, String> {
     let pairs = ChordParser::parse(Rule::chord_progression, input)
         .map_err(|e| format!("Parse error: {}", e))?;
@@ -32,7 +34,10 @@ pub fn parse_chord_progression(input: &str) -> Result<Vec<u8>, String> {
         for inner_pair in pair.into_inner() {
             if inner_pair.as_rule() == Rule::chord {
                 let chord = inner_pair.as_str();
-                degrees.push(chord_to_degree(chord));
+                match chord_to_degree(chord) {
+                    Some(degree) => degrees.push(degree),
+                    None => return Err(format!("Invalid chord: {}", chord)),
+                }
             }
         }
     }
@@ -85,6 +90,13 @@ mod tests {
     fn test_wasm_function() {
         let result = parse_chords_wasm("C-F-G-C");
         assert_eq!(result, "1,4,5,1");
+    }
+
+    #[test]
+    fn test_invalid_chord() {
+        let result = parse_chord_progression("C-X-G");
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("Parse error"));
     }
 }
 

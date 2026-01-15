@@ -1,5 +1,6 @@
 // Grammar for parsing chord progressions like "C-F-G-C"
-// Each chord is a note name (C, D, E, F, G, A, B)
+// Each chord is a basic note name (C, D, E, F, G, A, B)
+// Note: Does not currently support accidentals (sharps/flats)
 
 WHITESPACE = _{ " " | "\t" | "\n" | "\r" }
 
