@@ -41,11 +41,21 @@ fn main() {
 }
 ```
 
+サンプルを実行:
+```bash
+cargo run --example basic
+```
+
 ### CLI
 
 ```bash
+# デバッグビルドで実行
 cargo run --bin chord2mml-cli C-F-G-C
 # 出力: 1,4,5,1
+
+# リリースビルドで実行（最適化済み）
+cargo build --release --bin chord2mml-cli
+./target/release/chord2mml-cli C-F-G-C
 ```
 
 ### ブラウザ (WASM)
@@ -54,11 +64,14 @@ cargo run --bin chord2mml-cli C-F-G-C
 
 ローカルで実行:
 ```bash
-# 簡易サーバーを起動（例: Python）
-cd demo
-python3 -m http.server 8000
+# 簡易サーバーを起動
+./run-demo.sh
+# または
+cd demo && python3 -m http.server 8000
 # ブラウザで http://localhost:8000 を開く
 ```
+
+GitHub Pagesでのデモ: https://cat2151.github.io/chord2mml-pest/demo/
 
 ### JavaScript/TypeScript
 
@@ -72,11 +85,19 @@ console.log(result); // "1,4,5,1"
 
 ## 開発
 
+### 必要なツール
+
+- Rust (1.70+)
+- wasm-pack (WASMビルド用)
+
 ### ビルド
 
 ```bash
 # ライブラリとCLIをビルド
 cargo build
+
+# リリースビルド（最適化）
+cargo build --release
 
 # WASMをビルド
 wasm-pack build --target web --out-dir pkg
@@ -88,6 +109,24 @@ wasm-pack build --target web --out-dir pkg
 cargo test
 ```
 
+### ディレクトリ構成
+
+```
+chord2mml-pest/
+├── src/
+│   ├── lib.rs           # ライブラリのメインコード
+│   ├── grammar.pest     # pestパーサーの文法定義
+│   └── bin/
+│       └── cli.rs       # CLIバイナリ
+├── examples/
+│   └── basic.rs         # 使用例
+├── demo/
+│   └── index.html       # ブラウザデモ
+├── pkg/                 # WASM出力（自動生成）
+└── Cargo.toml           # プロジェクト設定
+```
+
 ## ライセンス
 
 MITライセンス
+
