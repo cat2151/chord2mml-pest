@@ -1,0 +1,21 @@
+[package]
+name = "chord2mml_pest"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
+[dependencies]
+pest = "2.7"
+pest_derive = "2.7"
+wasm-bindgen = "0.2"
+
+[dev-dependencies]
+
+[[bin]]
+name = "chord2mml-cli"
+path = "src/bin/cli.rs"

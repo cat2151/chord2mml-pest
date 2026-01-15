@@ -1,0 +1,10 @@
+// Grammar for parsing chord progressions like "C-F-G-C"
+// Each chord is a note name (C, D, E, F, G, A, B)
+
+WHITESPACE = _{ " " | "\t" | "\n" | "\r" }
+
+chord = { ^"C" | ^"D" | ^"E" | ^"F" | ^"G" | ^"A" | ^"B" }
+
+separator = { "-" }
+
+chord_progression = { SOI ~ chord ~ (separator ~ chord)* ~ EOI }
