@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chord2MML Parser Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: monospace;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e7f3ff;
+            border-left: 4px solid #007bff;
+            border-radius: 5px;
+        }
+        .example {
+            margin-top: 10px;
+            color: #666;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 Chord2MML Parser Demo</h1>
+        
+        <div class="info">
+            <p>このデモは、Rustのpestクレートを使ったコード進行パーサーです。</p>
+            <p>コード進行を入力すると、各コードをC majorスケールの度数（1-7）に変換します。</p>
+            <p class="example"><strong>例:</strong> <code>C-F-G-C</code> → <code>1,4,5,1</code></p>
+        </div>
+
+        <label for="input">コード進行を入力してください（例: C-F-G-C）:</label>
+        <textarea id="input" rows="5" placeholder="C-F-G-C">C-F-G-C</textarea>
+        
+        <button onclick="parseChords()">Parse</button>
+    </div>
+
+    <script type="module">
+        import init, { parse_chords_wasm } from '../pkg/chord2mml_pest.js';
+
+        // Initialize the WASM module
+        await init();
+
+        // Make the parse function available globally
+        window.parseChords = function() {
+            const input = document.getElementById('input').value;
+            console.log('Input:', input);
+            
+            try {
+                const result = parse_chords_wasm(input);
+                console.log('Result:', result);
+                alert('結果がコンソールに出力されました！\n結果: ' + result);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('エラー: ' + error);
+            }
+        };
+
+        console.log('Chord2MML Parser initialized!');
+    </script>
+</body>
+</html>

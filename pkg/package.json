@@ -1,0 +1,15 @@
+{
+  "name": "chord2mml_pest",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "chord2mml_pest_bg.wasm",
+    "chord2mml_pest.js",
+    "chord2mml_pest.d.ts"
+  ],
+  "main": "chord2mml_pest.js",
+  "types": "chord2mml_pest.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
